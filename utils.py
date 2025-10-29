@@ -2,7 +2,7 @@ import argparse
 import os
 from typing import Optional
 
-from constants import EXTENSIONS
+from extension_manager import ExtensionManager
 
 
 def valid_folder(path: str):
@@ -27,8 +27,24 @@ def get_extension(file_name: str):
     return ext.lower()
 
 
-def get_file_type(ext: str) -> Optional[str]:
-    for file_type in EXTENSIONS:
-        if ext in EXTENSIONS[file_type]:
+def get_file_type(ext: str, manager: ExtensionManager) -> Optional[str]:
+    for file_type in manager.data:
+        if ext in manager.data[file_type]:
             return file_type
     return None
+
+
+def load_default_extensions(
+    extension_manager: ExtensionManager,
+):
+    extension_manager.add_extension("Audio", "mp3")
+
+    extension_manager.add_extension("Video", "mp4")
+
+    extension_manager.add_extension("Document", "pdf")
+    extension_manager.add_extension("Document", "txt")
+
+    extension_manager.add_extension("Image", "jpg")
+    extension_manager.add_extension("Image", "jpeg")
+    extension_manager.add_extension("Image", "png")
+    extension_manager.add_extension("Image", "gif")

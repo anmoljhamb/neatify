@@ -1,4 +1,5 @@
 # Byte-compiled / optimized / DLL files
+extensions.json
 dummy_folder
 __pycache__/
 *.py[codz]

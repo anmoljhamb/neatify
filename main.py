@@ -1,10 +1,17 @@
 import argparse
 import os
+from pathlib import Path
 
-from utils import get_extension, get_file_type, list_files, valid_folder
+from constants import extension_manager
+from extension_manager import ExtensionManager
+from utils import (get_extension, get_file_type, list_files,
+                   load_default_extensions, valid_folder)
 
 
-def organize_folder(folder_path: str):
+def organise_folder(
+    folder_path: str,
+    manager: ExtensionManager,
+):
     print(f"Using folder: {folder_path}")
     files = list_files(folder_path)
 
@@ -14,7 +21,7 @@ def organize_folder(folder_path: str):
     for file in files:
         file_name = os.path.basename(file)
         ext = get_extension(file_name)
-        file_type = get_file_type(ext)
+        file_type = get_file_type(ext, manager)
 
         if not file_type:
             unknowns.append(file)
@@ -59,17 +66,110 @@ def organize_folder(folder_path: str):
 
 def main():
     parser = argparse.ArgumentParser(description="Process a folder path.")
+
     parser.add_argument(
+        "--file",
+        type=Path,
+        default=Path("extensions.json"),
+        help="Path to the extensions JSON file (default: extensions.json)",
+    )
+
+    subparsers = parser.add_subparsers(
+        dest="command",
+        required=True,
+    )
+
+    organise_parser = subparsers.add_parser(
+        "organize",
+        help="Organise a given folder",
+    )
+
+    subparsers.add_parser(
+        "default",
+        help="Restore the default.",
+    )
+
+    organise_parser.add_argument(
         "folder",
         type=valid_folder,
         help="Path to the target folder.",
     )
 
-    args = parser.parse_args()
+    list_parser = subparsers.add_parser("list", help="List extensions")
+    # list_parser.add_argument(
+    #     "category", nargs="?", help="Optional category to list extensions for"
+    # )
 
-    organize_folder(
-        folder_path=args.folder,
+    add_parser = subparsers.add_parser("add", help="Add an extension to a category")
+    add_parser.add_argument("category", help="Category name")
+    add_parser.add_argument("extension", help="Extension to add (e.g. .jpg)")
+
+    remove_parser = subparsers.add_parser(
+        "remove",
+        help="Remove an extension from a category",
     )
+    remove_parser.add_argument("category", help="Category name")
+    remove_parser.add_argument("extension", help="Extension to remove")
+
+    rmcat_parser = subparsers.add_parser("rmcat", help="Remove an entire category")
+    rmcat_parser.add_argument("category", help="Category name to remove")
+
+    clear_parser = subparsers.add_parser(
+        "clear", help="Remove all categories and extensions"
+    )
+
+    args = parser.parse_args()
+    manager = ExtensionManager(args.file)
+
+    if args.command == "list":
+        if not manager.data:
+            print("No categories found.")
+
+        for cat, exts in manager.data.items():
+            print(f"[{cat}]")
+            for e in sorted(exts):
+                print(f"  .{e}")
+
+    elif args.command == "add":
+        manager.add_extension(args.category, args.extension)
+        print(f"Added .{args.extension.lstrip('.')} to '{args.category}'")
+
+    elif args.command == "remove":
+        try:
+            manager.remove_extension(args.category, args.extension)
+            print(f"Removed .{args.extension.lstrip('.')} from '{args.category}'")
+        except KeyError as e:
+            print(e)
+
+    elif args.command == "rmcat":
+        if args.category in manager.data:
+            del manager.data[args.category]
+            manager._save()
+            print(f"Removed category '{args.category}'")
+        else:
+            print(f"Category '{args.category}' not found.")
+
+    elif args.command == "clear":
+        confirm = (
+            input("Are you sure you want to clear all extensions? (y/N): ")
+            .strip()
+            .lower()
+        )
+        if confirm == "y":
+            manager._data.clear()
+            manager._save()
+            print("All data cleared.")
+        else:
+            print("Cancelled.")
+
+    elif args.command == "organise":
+        organise_folder(
+            folder_path=args.folder,
+            manager=manager,
+        )
+
+    elif args.command == "default":
+        load_default_extensions(manager)
 
 
 if __name__ == "__main__":
