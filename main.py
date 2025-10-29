@@ -2,7 +2,6 @@ import argparse
 import os
 from pathlib import Path
 
-from constants import extension_manager
 from extension_manager import ExtensionManager
 from utils import (get_extension, get_file_type, list_files,
                    load_default_extensions, safe_move, valid_folder)
@@ -57,7 +56,7 @@ def organise_folder(
 
     print(f"A total of {total_files_moved} file(s) were moved.")
     if total_files_moved > 0:
-        print(f"Summary: ")
+        print("Summary: ")
         for file_type in track:
             print(f"There were {track[file_type]} {file_type}(s)")
     if len(unknowns) > 0:
