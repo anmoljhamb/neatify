@@ -1,4 +1,5 @@
 # Byte-compiled / optimized / DLL files
+make_dummy_data.py
 extensions.json
 dummy_folder
 __pycache__/

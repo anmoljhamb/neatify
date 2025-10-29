@@ -1,6 +1,7 @@
 import argparse
 import os
-from typing import Optional
+import re
+from typing import List, Optional
 
 from extension_manager import ExtensionManager
 
@@ -14,7 +15,7 @@ def valid_folder(path: str):
 
 def list_files(folder_path: str):
     files = os.listdir(folder_path)
-    temp = []
+    temp: List[str] = []
     for f in files:
         file_path = os.path.join(folder_path, f)
         if os.path.isfile(file_path):
@@ -48,3 +49,45 @@ def load_default_extensions(
     extension_manager.add_extension("Image", "jpeg")
     extension_manager.add_extension("Image", "png")
     extension_manager.add_extension("Image", "gif")
+
+
+def increment_filename(name_with_ext: str):
+    name, *ext_parts = name_with_ext.split(".")
+    ext = ".".join(ext_parts) if ext_parts else ""
+
+    pattern = r"^(.*)\((\d+)\)$"
+    m = re.match(pattern, name.strip())
+
+    if m:
+        base_name, number = m.groups()
+        new_number = int(number) + 1
+        new_name = f"{base_name.strip()} ({new_number})"
+    else:
+        new_name = f"{name.strip()} (1)"
+
+    # Recombine with extension (if any)
+    if ext:
+        return f"{new_name}.{ext}"
+    return new_name
+
+
+def safe_move(
+    old_file_path: str,
+    new_file_path: str,
+):
+    if os.path.exists(new_file_path):
+        print(f"There is already a file at: {new_file_path}")
+
+        file_name = os.path.basename(new_file_path)
+        new_file_name = increment_filename(file_name)
+        new_file_path = os.path.join(
+            os.path.dirname(new_file_path),
+            new_file_name,
+        )
+        print(f"Renaming it to: {new_file_name}")
+
+        safe_move(old_file_path, new_file_path)
+        return
+
+    os.rename(old_file_path, new_file_path)
+    return

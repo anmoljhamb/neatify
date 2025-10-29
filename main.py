@@ -5,7 +5,7 @@ from pathlib import Path
 from constants import extension_manager
 from extension_manager import ExtensionManager
 from utils import (get_extension, get_file_type, list_files,
-                   load_default_extensions, valid_folder)
+                   load_default_extensions, safe_move, valid_folder)
 
 
 def organise_folder(
@@ -46,7 +46,7 @@ def organise_folder(
             file_name,
         )
 
-        os.rename(
+        safe_move(
             file,
             new_file_name,
         )
