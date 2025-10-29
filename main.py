@@ -55,7 +55,7 @@ def organise_folder(
     for x in track.values():
         total_files_moved += x
 
-    print(f"A total of {total_files_moved} were moved.")
+    print(f"A total of {total_files_moved} file(s) were moved.")
     if total_files_moved > 0:
         print(f"Summary: ")
         for file_type in track:
@@ -80,7 +80,7 @@ def main():
     )
 
     organise_parser = subparsers.add_parser(
-        "organize",
+        "organise",
         help="Organise a given folder",
     )
 
@@ -96,9 +96,6 @@ def main():
     )
 
     list_parser = subparsers.add_parser("list", help="List extensions")
-    # list_parser.add_argument(
-    #     "category", nargs="?", help="Optional category to list extensions for"
-    # )
 
     add_parser = subparsers.add_parser("add", help="Add an extension to a category")
     add_parser.add_argument("category", help="Category name")
