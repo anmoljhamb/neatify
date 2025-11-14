@@ -3,7 +3,7 @@ import os
 import re
 from typing import List, Optional
 
-from extension_manager import ExtensionManager
+from neatify.extension_manager import ExtensionManager
 
 
 def valid_folder(path: str):

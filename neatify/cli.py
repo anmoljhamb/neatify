@@ -2,9 +2,9 @@ import argparse
 import os
 from pathlib import Path
 
-from extension_manager import ExtensionManager
-from utils import (get_extension, get_file_type, list_files,
-                   load_default_extensions, safe_move, valid_folder)
+from neatify.extension_manager import ExtensionManager
+from neatify.utils import (get_extension, get_file_type, list_files,
+                           load_default_extensions, safe_move, valid_folder)
 
 
 def organise_folder(
