@@ -9,6 +9,12 @@ A simple CLI tool to organize files in a folder by their extensions.
 - Add, remove, and list file extension categories
 - Restore default extension mappings
 
+## Screenshot
+
+![Neatify in action](./screenshot.png)
+
+_Organizing files with Neatify_
+
 ## Installation
 
 ### From Source
