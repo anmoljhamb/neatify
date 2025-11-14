@@ -2,14 +2,13 @@ import json
 from pathlib import Path
 from typing import Dict, Set
 
-FILE = Path("extensions.json")
-
 
 class ExtensionManager:
     _data: Dict[str, Set[str]]
 
-    def __init__(self, path=FILE) -> None:
+    def __init__(self, path: Path) -> None:
         self.path = path
+        self.path.parent.mkdir(parents=True, exist_ok=True)
         self._data = self._load()
 
     def _load(self) -> Dict[str, Set[str]]:

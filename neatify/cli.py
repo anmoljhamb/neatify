@@ -2,6 +2,7 @@ import argparse
 import os
 from pathlib import Path
 
+from neatify.constants import DEFAULT_FILE_PATH
 from neatify.extension_manager import ExtensionManager
 from neatify.utils import (get_extension, get_file_type, list_files,
                            load_default_extensions, safe_move, valid_folder)
@@ -69,7 +70,7 @@ def main():
     parser.add_argument(
         "--file",
         type=Path,
-        default=Path("extensions.json"),
+        default=DEFAULT_FILE_PATH,
         help="Path to the extensions JSON file (default: extensions.json)",
     )
 
