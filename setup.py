@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="neatify",
-    version="1.0.0",
+    version="1.0.1",
     author="Anmol Jhamb",
     author_email="talktoanmol@outlook.com",
     description="A CLI tool to organize files by their extensions",
