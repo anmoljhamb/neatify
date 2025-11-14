@@ -42,10 +42,8 @@ def load_default_extensions(
     extension_manager: ExtensionManager,
 ):
     path = Path(__file__)
-    file_path = path.parent.parent / "default_extensions.json"
     temp_file_path = path.parent / "default_extensions.json"
-    x = file_path if file_path.exists() else temp_file_path
-    with open(x) as f:
+    with open(temp_file_path) as f:
         data = f.read()
         default_extensions = json.loads(data)
     for cat in default_extensions:
