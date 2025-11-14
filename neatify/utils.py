@@ -1,6 +1,8 @@
 import argparse
+import json
 import os
 import re
+from pathlib import Path
 from typing import List, Optional
 
 from neatify.extension_manager import ExtensionManager
@@ -38,17 +40,14 @@ def get_file_type(ext: str, manager: ExtensionManager) -> Optional[str]:
 def load_default_extensions(
     extension_manager: ExtensionManager,
 ):
-    extension_manager.add_extension("Audio", "mp3")
-
-    extension_manager.add_extension("Video", "mp4")
-
-    extension_manager.add_extension("Document", "pdf")
-    extension_manager.add_extension("Document", "txt")
-
-    extension_manager.add_extension("Image", "jpg")
-    extension_manager.add_extension("Image", "jpeg")
-    extension_manager.add_extension("Image", "png")
-    extension_manager.add_extension("Image", "gif")
+    path = Path(__file__)
+    file_path = path.parent.parent / "default_extensions.json"
+    with open(file_path) as f:
+        data = f.read()
+        default_extensions = json.loads(data)
+    for cat in default_extensions:
+        for ext in default_extensions[cat]:
+            extension_manager.add_extension(cat, ext)
 
 
 def increment_filename(name_with_ext: str):
