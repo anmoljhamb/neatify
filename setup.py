@@ -19,9 +19,7 @@ setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.7",
-    install_requires=[
-        # Add your dependencies from requirements.txt here
-    ],
+    install_requires=[],
     entry_points={
         "console_scripts": [
             "neatify=neatify.cli:main",
