@@ -28,6 +28,34 @@ pip install -e .
 pip install neatify
 ```
 
+## Getting Started
+
+After installation, you'll need to set up your configuration file before organizing files.
+
+1. **Generate the default configuration:**
+
+```bash
+   neatify default
+```
+
+This creates a comprehensive list of file extensions organized by categories (Images, Documents, Videos, etc.).
+
+2. **Verify your configuration (optional):**
+
+```bash
+   neatify list
+```
+
+This shows all configured categories and their extensions.
+
+3. **Organize your first folder:**
+
+```bash
+   neatify organise /path/to/folder
+```
+
+> **Note:** Running `neatify organise` without first running `neatify default` will fail because no configuration file exists yet.
+
 ## Usage
 
 ### Organize a Folder
