@@ -2,6 +2,7 @@ import argparse
 import json
 import os
 import re
+from os.path import exists
 from pathlib import Path
 from typing import List, Optional
 
@@ -42,7 +43,9 @@ def load_default_extensions(
 ):
     path = Path(__file__)
     file_path = path.parent.parent / "default_extensions.json"
-    with open(file_path) as f:
+    temp_file_path = path.parent / "default_extensions.json"
+    x = file_path if file_path.exists() else temp_file_path
+    with open(x) as f:
         data = f.read()
         default_extensions = json.loads(data)
     for cat in default_extensions:
